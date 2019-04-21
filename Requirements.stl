@@ -1,0 +1,27 @@
+# Amount of food that feeder dispense per second should be converged to actual amount of food per second
+param reallySmallAmount = 0.1
+closeToDesired := (amountPerSecond - actualAmountPerSecond) < reallySmallAmount)
+amountOfFood := ev (closeToDesired => alw_[0, 24] (closeToDesired) )
+amountOfFood := alw ((not closeToDesired) until_[0, 24] (closeToDesired))
+
+# Amount of food that feeder dispense per second should be between guided maximum and minimum amount of food. 
+param reallySmallAmount = 0.1
+betweenGuidedAmount := alw (dispenseAmount < maximumAmountAtOnce and dispenseAmount < minimumAmountAtOnce)
+
+# Error between calculated amount of food and actual amount per food should be less then 5
+param reallySmallAmount = 0.1
+closeToDesired1 := (amountPerSecond - actualAmountPerSecond) < reallySmallAmount)
+convergedAmountOfFood := ev (closeToDesired => alw_[0, 24] (closeToDesired)
+# TODO can I reuse the previous one?
+error := 5
+closeToDesired := (dispenseAmount - actualAmount) < error
+errorOfAmountOfFood := alw ((not convergedAmountOfFood) until closeToDesired)
+
+# Water level should be higher than 3cm
+param reallySmallAmount = 0.1
+minimumWaterLevel = 3
+higherThanMinimumWaterLevel := alw (waterLevel > minimumWaterLevel - reallySmallAmount)
+
+# When machine detect a pet, a water module should work for 2 minutes 
+# because of the food module, maybe we have to set the time to 1 hour instead of 2 minutes
+waterModuleWorking := alw ((not isCatHere) until_[0, 2] (waterControl == 1))
