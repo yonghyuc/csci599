@@ -1,0 +1,7 @@
+# Amount of food that feeder dispense per second should be converged to actual amount of food per second
+param reallySmallAmount = 0.1
+closeToDesired := ((DispenseAmountPerSec - actualAmountOfFoodDispense) < reallySmallAmount)
+amountOfFood := ev (alw (closeToDesired))
+
+# Amount of food that feeder dispense per second should be between guided maximum and minimum amount of food. 
+betweenGuidedAmount := alw ((DispenseAmountPerDay < max))
